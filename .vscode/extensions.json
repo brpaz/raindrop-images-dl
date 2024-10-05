@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"golang.Go",
+    "mkhl.direnv",
+    "task.vscode-task",
+    "bbenoist.Nix",
+    "arrterian.nix-env-selector"
+	]
+}

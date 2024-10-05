@@ -1,0 +1,11 @@
+{
+  "go.testTags": "",
+  "go.testFlags": ["-v"],
+  "go.buildTags": "",
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    "--fast"
+  ],
+  "go.formatTool": "gofumpt",
+  "go.useLanguageServer": true
+}
