@@ -25,6 +25,7 @@
             pkgs.hadolint
             pkgs.delve
             pkgs.commitlint
+            pkgs.goreleaser
           ];
 
           shellHook = ''

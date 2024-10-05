@@ -1,0 +1,41 @@
+{
+  "result": true,
+  "item": {
+    "_id": 47919682,
+    "title": "Images",
+    "description": "",
+    "user": {
+      "$ref": "users",
+      "$id": 590523
+    },
+    "parent": {
+      "$ref": "collections",
+      "$id": 40045982
+    },
+    "public": false,
+    "view": "grid",
+    "count": 7,
+    "cover": [
+      "https://up.raindrop.io/collection/thumbs/479/196/82/2ef9ab774ec704e5b381b9febe8abe20.png"
+    ],
+    "sort": -1,
+    "expanded": true,
+    "creatorRef": {
+      "_id": 590523,
+      "name": "brpaz",
+      "email": ""
+    },
+    "lastAction": "2024-10-05T13:28:48.157Z",
+    "created": "2024-09-18T21:50:03.880Z",
+    "lastUpdate": "2024-10-05T13:28:48.158Z",
+    "slug": "images",
+    "color": "#2e8bb1",
+    "access": {
+      "for": 590523,
+      "level": 4,
+      "root": false,
+      "draggable": true
+    },
+    "author": true
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "result": true,
+  "items": [
+    {
+      "_id": 859330230,
+      "link": "https://example.com/image1.jpg",
+      "title": "Image 1",
+      "excerpt": "",
+      "note": "Image 1 note",
+      "type": "image",
+      "user": {
+        "$ref": "users",
+        "$id": 590523
+      },
+      "cover": "https://example.com/image1-cover.jpg",
+      "media": [],
+      "tags": [
+        "Instagram"
+      ],
+      "important": false,
+      "reminder": {
+        "date": null
+      },
+      "removed": false,
+      "created": "2024-09-22T21:37:03.071Z",
+      "collection": {
+        "$ref": "collections",
+        "$id": 47919682,
+        "oid": 47919682
+      },
+      "highlights": [],
+      "lastUpdate": "2024-09-22T21:37:53.067Z",
+      "domain": "instagram.fopo5-1.fna.fbcdn.net",
+      "creatorRef": {
+        "_id": 590523,
+        "name": "brpaz",
+        "avatar": "",
+        "email": ""
+      },
+      "sort": 859330230,
+      "cache": {
+        "status": "failed"
+      },
+      "broken": false,
+      "collectionId": 47919682
+    },
+    {
+      "_id": 857289946,
+      "link": "https://example.com/image2.jpg",
+      "title": "Image 2",
+      "excerpt": "Exceprt 2",
+      "note": "Note 2",
+      "type": "image",
+      "user": {
+        "$ref": "users",
+        "$id": 590523
+      },
+      "cover": "https://example.com/image2-cover.jpg",
+      "media": [],
+      "tags": [
+        "Facebook"
+      ],
+      "important": false,
+      "reminder": {
+        "date": null
+      },
+      "removed": false,
+      "created": "2024-09-19T18:21:44.287Z",
+      "collection": {
+        "$ref": "collections",
+        "$id": 47919682,
+        "oid": 47919682
+      },
+      "highlights": [],
+      "lastUpdate": "2024-09-19T18:22:10.071Z",
+      "domain": "scontent.fopo5-1.fna.fbcdn.net",
+      "creatorRef": {
+        "_id": 590523,
+        "name": "brpaz",
+        "avatar": "",
+        "email": ""
+      },
+      "sort": 857289946,
+      "cache": {
+        "status": "ready",
+        "size": 85110,
+        "created": "2024-09-19T18:34:11.565Z"
+      },
+      "broken": false,
+      "collectionId": 47919682
+    }
+  ],
+  "count": 2,
+  "collectionId": 47919682
+}

@@ -1,0 +1,106 @@
+# Taskfile is used to run common tasks when developing the application.
+# Check : https://taskfile.dev/usage/
+version: "3"
+
+vars:
+  PROJECT_NAME: "raindrop-images-dl"
+  REPORTS_DIR: reports
+  GIT_VERSION:
+    sh: echo "v0.1.0"
+    #sh: git describe --tags 2>/dev/null
+  GIT_SHA:
+    sh: git rev-parse --short HEAD 2>/dev/null
+  BUILD_DATE:
+    sh: date -u +'%Y-%m-%dT%H:%M:%SZ'
+
+env:
+  DOCKER_BUILDKIT: 1
+
+dotenv: [".env", ".env.example", ".env.{{.ENV}}"]
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  # ==================================================
+  # Linting and Tests
+  # ==================================================
+  lint:
+    desc: Runs all linting tasks
+    cmds:
+      - task lint-go
+      - task lint-docker
+      - task lint-api
+
+  lint-go:
+    desc: Lints Go code using golangci-lint
+    aliases:
+      - golint
+    cmds:
+      - golangci-lint run --fix
+
+  lint-docker:
+    desc: Lints Dockerfile using Hadolint
+    aliases:
+      - hadolint
+    cmds:
+      - hadolint Dockerfile
+
+  fmt:
+    desc: Formats all code
+    cmds:
+      - gofumpt -l -w .
+
+  gomarkdoc:
+    desc: Generates documentation from Go comments
+    cmds:
+      - gomarkdoc --output "\{\{.Dir\}\}/README.md" ./internal/...
+
+  test:
+    desc: Runs application tests
+    summary: Executes all package level tests (unit and integration)
+    cmds:
+      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./internal/...
+    deps:
+      - ensure-reports-dir
+
+  test-cover-report:
+    desc: Opens the test coverage report in the browser
+    cmds:
+      - go tool cover -html=reports/cover.out
+
+  snapshot:
+    desc: Builds a snapshot release
+    cmds:
+      - goreleaser --snapshot --clean
+
+  build-local:
+    desc: Builds the application locally
+    cmds:
+      - go build -o build/{{.PROJECT_NAME}} main.go
+
+  # ==================================================
+  # Build tasks
+  # ==================================================
+  build-docker:
+    desc: Builds the application using docker
+    cmds:
+      - |
+        docker buildx build \
+          --build-arg VERSION={{ .GIT_VERSION }} \
+          --build-arg REVISION={{ .GIT_SHA }} \
+          --build-arg BUILDTIME={{ .BUILD_DATE }} \
+          --load \
+          -t {{.PROJECT_NAME }}:local-dev .
+    vars:
+      TARGET: ${TARGET:-dev}
+
+  # ==================================================
+  # Development tasks
+  # ==================================================
+  dev:
+    desc: Starts the application
+    aliases: ["up", "start"]
+    cmds:
+      - air
