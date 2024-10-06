@@ -21,8 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # A custom PAT is required, to bypass branch protection rules
-          persist-credentials: false
+          fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Update Changelog

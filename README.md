@@ -3,8 +3,10 @@
 > A CLI command to download images from [Raindrop](https://raindrop.io) Collections.
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/brpaz/raindrop-images-dl?style=for-the-badge)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/brpaz/raindrop-images-dl?style=for-the-badge)](https://goreportcard.com/report/github.com/brpaz/raindrop-images-dl)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/brpaz/raindrop-images-dl/ci.yml?style=for-the-badge)](https://github.com/brpaz/raindrop-images-dl/actions)
+
 [![Codecov](https://img.shields.io/codecov/c/github/brpaz/raindrop-images-dl?style=for-the-badge)](https://app.codecov.io/gh/brpaz/raindrop-images-dl)
 [![GitHub License](https://img.shields.io/github/license/brpaz/raindrop-images-dl?style=for-the-badge)](LICENSE)
 
