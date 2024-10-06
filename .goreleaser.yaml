@@ -16,9 +16,9 @@ builds:
   - env:
       - CGO_ENABLED=0
     ldflags:
-      - -X github.com/brpaz/raindrop-images-dl/internal/version/version.Version={{.Version}}
-      - -X github.com/brpaz/raindrop-images-dl/internal/version/version.GitCommit={{.Commit}}
-      - -X github.com/brpaz/raindrop-images-dl/internal/version/version.BuildDate={{.Date}}
+      - -X github.com/brpaz/raindrop-images-dl/internal/version.Version={{.Version}}
+      - -X github.com/brpaz/raindrop-images-dl/internal/version.GitCommit={{.Commit}}
+      - -X github.com/brpaz/raindrop-images-dl/internal/version.BuildDate={{.Date}}
     goos:
       - linux
       - windows

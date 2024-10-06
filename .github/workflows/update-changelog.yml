@@ -12,12 +12,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.CI_BOT_APP_ID }}
+          private-key: ${{ secrets.CI_BOT_SECRET }}
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           # A custom PAT is required, to bypass branch protection rules
           persist-credentials: false
-          token: ${{ secrets.REPO_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update Changelog
         uses: stefanzweifel/changelog-updater-action@v1

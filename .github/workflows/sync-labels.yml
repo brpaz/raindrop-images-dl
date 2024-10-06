@@ -13,7 +13,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: micnncim/action-label-syncer@v1
+      - uses: brpaz/action-label-syncer@master
         with:
           manifest: .github/labels.yml
         env:

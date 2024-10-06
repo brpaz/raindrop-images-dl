@@ -6,8 +6,7 @@ vars:
   PROJECT_NAME: "raindrop-images-dl"
   REPORTS_DIR: reports
   GIT_VERSION:
-    sh: echo "v0.1.0"
-    #sh: git describe --tags 2>/dev/null
+    sh: git describe --tags 2>/dev/null || echo "v0.0.0"
   GIT_SHA:
     sh: git rev-parse --short HEAD 2>/dev/null
   BUILD_DATE:
@@ -61,9 +60,8 @@ tasks:
     desc: Runs application tests
     summary: Executes all package level tests (unit and integration)
     cmds:
-      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./internal/...
-    deps:
-      - ensure-reports-dir
+      - mkdir -p {{.REPORTS_DIR}}
+      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./internal/... ./cmd/...
 
   test-cover-report:
     desc: Opens the test coverage report in the browser
@@ -78,7 +76,13 @@ tasks:
   build-local:
     desc: Builds the application locally
     cmds:
-      - go build -o build/{{.PROJECT_NAME}} main.go
+      - |
+        go build -o build/{{.PROJECT_NAME}} -ldflags="-w -s \
+          -X github.com/brpaz/raindrop-images-dl/internal/version.Version={{ .VERSION }} \
+          -X github.com/brpaz/raindrop-images-dl/internal/version.GitCommit={{ .GIT_COMMIT }}\
+          -X github.com/brpaz/raindrop-images-dl/internal/version.BuildDate={{ .BUILD_DATE }} \
+          -extldflags '-static'" \
+        main.go
 
   # ==================================================
   # Build tasks
@@ -93,14 +97,3 @@ tasks:
           --build-arg BUILDTIME={{ .BUILD_DATE }} \
           --load \
           -t {{.PROJECT_NAME }}:local-dev .
-    vars:
-      TARGET: ${TARGET:-dev}
-
-  # ==================================================
-  # Development tasks
-  # ==================================================
-  dev:
-    desc: Starts the application
-    aliases: ["up", "start"]
-    cmds:
-      - air

@@ -10,7 +10,7 @@ on:
       - published
 
 env:
-  GO_VERSION: 1.23
+  GO_VERSION: 1.22
   GOTESTSUM_VERSION: 1.11.0
   GOLANGCI_LINT_VERSION: v1.60.1
   CI: true
@@ -76,7 +76,7 @@ jobs:
 
       - name: Run tests
         run: |
-          gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./internal/...
+          gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./internal/... ./cmd/...
 
       - name: Generate HTML report
         if: always() || failure()
@@ -144,8 +144,7 @@ jobs:
         with:
           name: snapshot-artifact
           path: dist/*
-          retention-days: 7
-
+          retention-days: 3
 
   build-docker:
     name: Build Docker Image
@@ -192,10 +191,9 @@ jobs:
           tags: ${{ env.TEST_IMAGE_TAG }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+            BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-            REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
-
+            GIT_COMMIT=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'

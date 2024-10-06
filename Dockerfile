@@ -16,9 +16,9 @@ COPY . .
 # ===================================
 FROM base as builder
 
-ARG BUILDTIME
 ARG VERSION
-ARG REVISION
+ARG GIT_COMMIT
+ARG BUILD_DATE
 ARG GC_FLAGS
 
 ARG TARGETOS
@@ -29,64 +29,11 @@ RUN --mount=target=. \
     GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
     -gcflags "${GC_FLAGS}" \
     -ldflags="-w -s \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.Version=${VERSION} \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.Revision=${REVISION} \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.BuildTime=${BUILDTIME} \
+    -X github.com/brpaz/raindrop-images-dl/internal/version.Version=${VERSION} \
+    -X github.com/brpaz/raindrop-images-dl/internal/version.GitCommit=${GIT_COMMIT} \
+    -X github.com/brpaz/raindrop-images-dl/internal/version.BuildDate=${BUILD_DATE} \
     -extldflags '-static'" \
-    -o /go/bin/api ./cmd/api
-
-RUN --mount=target=. \
-    --mount=type=cache,target=/root/.cache/go-build \
-    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
-    -gcflags "${GC_FLAGS}" \
-    -ldflags="-w -s \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.Version=${VERSION} \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.Revision=${REVISION} \
-    -X github.com/brpaz/raindrop-images-dl/internal/core/version/version.BuildDate=${BUILDTIME} \
-    -extldflags '-static'" \
-    -o /go/bin/migrate ./cmd/migrations
-
-# ==================================
-# dlv image
-# By being a sperate image, we can cache it
-# ===================================
-FROM --platform=$BUILDPLATFORM golang:1.22-alpine3.18 as delve
-
-SHELL ["/bin/ash", "-o", "pipefail", "-c"]
-
-RUN apk add --no-cache curl ca-certificates
-
-RUN go install -ldflags "-extldflags '-static'" \
-    -v github.com/go-delve/delve/cmd/dlv@v1.21.0
-
-# ==================================
-# Dev image
-# ===================================
-FROM base as dev
-
-ARG UID=1000
-ARG GID=1000
-
-ENV GOMODCACHE=/tmp/go/pkg/mod
-
-RUN apk add --no-cache curl && \
-    addgroup -g ${GID} app && \
-    adduser -D -u ${UID} -G app app
-
-COPY --from=delve /go/bin/dlv /usr/local/bin/dlv
-COPY --from=cosmtrek/air:v1.52.3 /go/bin/air /usr/local/bin/air
-
-COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-RUN chown -R app:app /src
-USER app
-
-VOLUME [ "/src" ]
-
-CMD ["air"]
+    -o /go/bin/raindrop-images-dl main.go
 
 # ===================================
 # production image
@@ -100,9 +47,9 @@ RUN apk add --no-cache curl ca-certificates && \
     addgroup -g ${GID} app && \
     adduser -D -u ${UID} -G app app
 
-COPY --from=builder --chown=app:app /go/bin/api /bin/api
+COPY --from=builder --chown=app:app /go/bin/raindrop-images-dl /bin/raindrop-images-dl
 
-ENTRYPOINT [ "/bin/api" ]
+ENTRYPOINT [ "/bin/raindrop-images-dl" ]
 
 USER app
 
