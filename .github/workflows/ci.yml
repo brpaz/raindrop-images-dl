@@ -73,10 +73,8 @@ jobs:
 
       - name: Setup Go test report
         run: |
-          go env GOPATH
-          go install github.com/vakenbolt/go-test-report/
-
-
+          go get github.com/vakenbolt/go-test-report
+          ls /home/runner/go/bin
       - name: Run tests
         run: |
           gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./internal/... ./cmd/...
