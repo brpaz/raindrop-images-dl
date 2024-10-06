@@ -72,7 +72,10 @@ jobs:
           gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
 
       - name: Setup Go test report
-        run: go get -u github.com/vakenbolt/go-test-report/
+        run: |
+          go env GOPATH
+          go install github.com/vakenbolt/go-test-report/
+
 
       - name: Run tests
         run: |
