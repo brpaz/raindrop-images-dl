@@ -24,7 +24,6 @@ Unfortunately the export feature of Raindrop is limited regarding images and upl
 - A [Raindrop](https://raindrop.io/) account.
 - A Raindrop API **Test token** - Check [here](https://developer.raindrop.io/v1/authentication/token)
 
-
 ### Install
 
 This application is built as a single binary so the installation is very easy. Just heads up to the [Releases pages](https://github.com/brpaz/raindrop-images-dl/releases) and download the latest version for your Operating system.
