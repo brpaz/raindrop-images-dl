@@ -73,18 +73,17 @@ jobs:
 
       - name: Setup Go test report
         run: |
-          go get github.com/vakenbolt/go-test-report
+          go get github.com/vakenbolt/
       - name: Run tests
         run: |
           gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./internal/... ./cmd/...
 
-      - run: ls -la /home/runner/go/bin
-      - name: Generate HTML report
-        if: always() || failure()
-        run: |
-          if [ -f reports/unit-tests-results.json ]; then
-            go-test-report < reports/unit-tests-results.json -o reports/unit-tests.html
-          fi
+      # - name: Generate HTML report
+      #   if: always() || failure()
+      #   run: |
+      #     if [ -f reports/unit-tests-results.json ]; then
+      #       go-test-report < reports/unit-tests-results.json -o reports/unit-tests.html
+      #     fi
 
       - name: Generate test report
         uses: dorny/test-reporter@v1
