@@ -2,6 +2,11 @@
 
 > A CLI command to Backup images stored in [Raindrop](https://raindrop.io) Collections.
 
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/brpaz/raindrop-images-dl/ci.yml?style=for-the-badge)](https://github.com/brpaz/raindrop-images-dl/actions)
+[![GitHub License](https://img.shields.io/github/license/brpaz/raindrop-images-dl?style=for-the-badge)](LICENSE)
+
+
+
 ## Motivation
 
 I am using Raindrop to archive Internet images like Gifs and Memes.

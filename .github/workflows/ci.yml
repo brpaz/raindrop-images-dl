@@ -71,23 +71,13 @@ jobs:
         with:
           gotestsum_version: ${{ env.GOTESTSUM_VERSION }}
 
-      - name: Setup Go test report
-        run: |
-          go get github.com/vakenbolt/
       - name: Run tests
         run: |
           gotestsum --junitfile reports/unit-tests.xml --jsonfile reports/unit-tests-results.json -- -race -covermode=atomic -coverprofile=cover.txt ./internal/... ./cmd/...
 
-      # - name: Generate HTML report
-      #   if: always() || failure()
-      #   run: |
-      #     if [ -f reports/unit-tests-results.json ]; then
-      #       go-test-report < reports/unit-tests-results.json -o reports/unit-tests.html
-      #     fi
-
       - name: Generate test report
         uses: dorny/test-reporter@v1
-        if: success() || failure()
+        if: !cancelled()
         with:
             name: Unit Tests Report
             path: 'reports/*.xml'
@@ -95,17 +85,24 @@ jobs:
 
       - name: Upload test report artifact
         uses: actions/upload-artifact@v4
-        if: always()
+        if: !cancelled()
         with:
           name: unit-test-report
           path: reports
 
       - name: Upload code coverage report to Codecov
-        if: always()
+        if: !cancelled()
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: cover.txt
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./reports/unit-tests.xml
 
   build-binaries:
     name: Build Binaries
