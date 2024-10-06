@@ -2,5 +2,5 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/debian
 {
 	"name": "Devenv",
-  "image": "ghcr.io/brpaz/devcontainer-templates/nix-devenv:1.0.4"
+  "image": "ghcr.io/brpaz/devcontainer-templates/nix-devenv:latest"
 }

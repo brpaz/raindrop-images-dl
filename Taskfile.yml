@@ -54,7 +54,7 @@ tasks:
   gomarkdoc:
     desc: Generates documentation from Go comments
     cmds:
-      - gomarkdoc --output "\{\{.Dir\}\}/README.md" ./internal/...
+      - gomarkdoc --output "\{\{.Dir\}\}/README.md" ./internal/... ./cmd/...
 
   test:
     desc: Runs application tests
