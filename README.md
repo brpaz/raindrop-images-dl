@@ -1,9 +1,6 @@
 # Raindrop Images Downloader
 
-> A CLI command to Backup images stored in [Raindrop](https://raindrop.io) Collections.
-
-
-<div align="center">
+> A CLI command to download images from [Raindrop](https://raindrop.io) Collections.
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/brpaz/raindrop-images-dl?style=for-the-badge)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brpaz/raindrop-images-dl?style=for-the-badge)](https://goreportcard.com/report/github.com/brpaz/raindrop-images-dl)
@@ -11,9 +8,7 @@
 [![Codecov](https://img.shields.io/codecov/c/github/brpaz/raindrop-images-dl?style=for-the-badge)](https://app.codecov.io/gh/brpaz/raindrop-images-dl)
 [![GitHub License](https://img.shields.io/github/license/brpaz/raindrop-images-dl?style=for-the-badge)](LICENSE)
 
-</div>
-
-## Motivation
+## 🏹 Motivation
 
 I am using Raindrop to archive Internet images like Gifs and Memes.
 
@@ -22,7 +17,7 @@ I am using Raindrop to archive Internet images like Gifs and Memes.
 Unfortunately the export feature of Raindrop is limited regarding images and uploaded files, so I built this tool to help with the backup process.
 
 
-## Getting started
+## 🚀 Getting started
 
 ### Pre-requisites
 
@@ -43,7 +38,10 @@ Get the `collection id` of the Raindrop collection you want to download from. Yo
 Then run the following command:
 
 ```shell
-raindrop-images-dl download -c=<my_collection_id> -k <raindrop_api_key> -o <path/to/images/dir>
+raindrop-images-dl download \
+    -c=<my_collection_id>
+    -k <raindrop_api_key>
+    -o <path/to/images/dir>
 ```
 
 Alternatively, envrionment variables can also be used instead of flags:
@@ -60,7 +58,7 @@ A `.info.json` file will be placed together with the image file. This file will 
 
 You can use this for doing some automations.
 
-## Contributing
+## 🤝 Contributing
 
 All contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) file for details.
 

@@ -10,6 +10,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        pname = "raindrop-images-dl";
+        version = "0.1.0";
       in
       {
         devShells.default = pkgs.mkShell {
@@ -38,6 +40,28 @@
           # Optional: setup Go environment variables
           GO111MODULE = "on";
           GOROOT = "${pkgs.go}/share/go";
+        };
+
+        packages.default = pkgs.stdenv.mkDerivation {
+          pname = "${pname}";
+          version = "${version}";
+          src = ./.;
+          buildInputs = [ pkgs.go ];
+
+          buildPhase = ''
+            # this line removes a bug where value of $HOME is set to a non-writable /homeless-shelter dir
+            export HOME=$(pwd)
+            export CGO_ENABLED=0
+            go build -o $out main.go
+          '';
+
+          meta = with pkgs.lib; {
+            homepage = "https://github.com/brpaz/raindrop-images-dl";
+            description = "Raindrop Images Downloader";
+            platforms = platforms.all;
+            license = licenses.mit;
+            maintainers = with maintainers; [ brpaz ];
+          };
         };
     });
 }
