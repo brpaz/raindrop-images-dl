@@ -1,8 +1,9 @@
-package cmd
+package app
 
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/brpaz/raindrop-images-dl/internal/cmd"
 	"github.com/brpaz/raindrop-images-dl/internal/version"
 )
 
@@ -11,10 +12,10 @@ type App struct {
 	rootCmd *cobra.Command
 }
 
-// NewApp creates a new instance of the CLI application.
-func NewApp() *App {
+// New creates a new instance of the application.
+func New() *App {
 	app := &App{
-		rootCmd: NewRootCmd(),
+		rootCmd: cmd.NewRootCmd(),
 	}
 
 	app.registerCommands()
@@ -23,13 +24,13 @@ func NewApp() *App {
 }
 
 func (a *App) registerCommands() {
-	versionCmd := NewVersionCmd(VersionInfo{
+	versionCmd := cmd.NewVersionCmd(cmd.VersionInfo{
 		Version:   version.Version,
 		GitCommit: version.GitCommit,
 		BuildDate: version.BuildDate,
 	})
 
-	downloadCmd := NewDownloadCmd()
+	downloadCmd := cmd.NewDownloadCmd()
 
 	a.rootCmd.AddCommand(
 		versionCmd,

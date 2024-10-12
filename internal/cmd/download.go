@@ -91,7 +91,7 @@ func NewDownloadCmd() *cobra.Command {
 
 	downloadCmd.Flags().IntP(FlagDownloadCollection, "c", 0, "The collection ID to download images from")
 	downloadCmd.Flags().StringP(FlagDownloadOutput, "o", "", "The output directory to save the images")
-	downloadCmd.Flags().StringP(FlagDownloadOutput, "k", "", "The Raindrop.io API key")
+	downloadCmd.Flags().StringP(FlagDownloadApiKey, "k", "", "The Raindrop.io API key")
 	downloadCmd.Flags().BoolP(FlagDownloadGenInfo, "i", true, "Generate a JSON file with the image metadata")
 
 	_ = downloadCmd.MarkFlagRequired(FlagDownloadCollection)

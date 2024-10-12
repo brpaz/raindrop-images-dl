@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewRootCmd creates a new instance of the root command.
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "raindrop-images-dl",

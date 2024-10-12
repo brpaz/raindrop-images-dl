@@ -14,9 +14,8 @@
         version = "0.1.0";
         gitCommit = self.rev or "dev";
 
-        # Find why this does not work
-        #currentDate = builtins.currentTime;
         currentDate = "2021-09-01T00:00:00Z";
+        #currentDate = builtins.currentTime;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -28,7 +27,6 @@
             pkgs.go-task
             pkgs.gomarkdoc
             pkgs.lefthook
-            pkgs.direnv
             pkgs.hadolint
             pkgs.delve
             pkgs.commitlint
@@ -52,6 +50,9 @@
           version = "${version}";
           src = ./.;
 
+          # Override phases to define the command line entry point
+          subPackages = [ "cmd" ];
+
           # When updating go.mod or go.sum, a new sha will need to be calculated,
           # update this if you have a mismatch after doing a change to thos files.
           vendorHash = "sha256-BNfSwK87GU2YO3x1AbxLwC+ByXkN4n/7OYX5mh04lP4=";
@@ -65,6 +66,10 @@
             "-X ${versionPkg}.GitCommit=${gitCommit}"
             "-X ${versionPkg}.BuildDate=${currentDate}"
           ];
+
+          postInstall = ''
+            mv $out/bin/cmd $out/bin/raindrop-images-dl
+          '';
 
           meta = with pkgs.lib; {
             homepage = "https://github.com/brpaz/raindrop-images-dl";

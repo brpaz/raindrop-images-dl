@@ -15,7 +15,7 @@ linters:
     - unused
     - gci
     - bodyclose
-    #- depguard
+    - depguard
     - gocritic
     - gocyclo
     - gofumpt
@@ -42,3 +42,14 @@ linters-settings:
   gocyclo:
     # Minimal code complexity to report.
     min-complexity: 20
+  # golangci-lint config
+  depguard:
+    rules:
+      default:
+        list-mode: lax # allow unless explicitely denied
+        files:
+          - $all
+          - "!$test"
+        deny:
+          - pkg: io/ioutil
+            desc: "replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil"

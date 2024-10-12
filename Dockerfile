@@ -33,7 +33,7 @@ RUN --mount=target=. \
     -X github.com/brpaz/raindrop-images-dl/internal/version.GitCommit=${GIT_COMMIT} \
     -X github.com/brpaz/raindrop-images-dl/internal/version.BuildDate=${BUILD_DATE} \
     -extldflags '-static'" \
-    -o /go/bin/raindrop-images-dl main.go
+    -o /go/bin/raindrop-images-dl cmd/main.go
 
 # ===================================
 # production image

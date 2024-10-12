@@ -54,14 +54,14 @@ tasks:
   gomarkdoc:
     desc: Generates documentation from Go comments
     cmds:
-      - gomarkdoc --output "\{\{.Dir\}\}/README.md" ./internal/... ./cmd/...
+      - gomarkdoc --output "{{ print `{{.Dir}}/README.md` }}" ./internal/...
 
   test:
     desc: Runs application tests
     summary: Executes all package level tests (unit and integration)
     cmds:
       - mkdir -p {{.REPORTS_DIR}}
-      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./internal/... ./cmd/...
+      - gotestsum --format="testname" --junitfile {{.REPORTS_DIR}}/unit-tests.xml --jsonfile {{.REPORTS_DIR}}/unit-tests.json -- -coverprofile={{.REPORTS_DIR}}/cover.out -covermode=atomic ./internal/...
 
   test-cover-report:
     desc: Opens the test coverage report in the browser
@@ -73,7 +73,7 @@ tasks:
     cmds:
       - goreleaser --snapshot --clean
 
-  build-local:
+  build:
     desc: Builds the application locally
     cmds:
       - |
@@ -82,7 +82,7 @@ tasks:
           -X github.com/brpaz/raindrop-images-dl/internal/version.GitCommit={{ .GIT_COMMIT }}\
           -X github.com/brpaz/raindrop-images-dl/internal/version.BuildDate={{ .BUILD_DATE }} \
           -extldflags '-static'" \
-        main.go
+        cmd/main.go
 
   # ==================================================
   # Build tasks
@@ -106,7 +106,7 @@ tasks:
     cmds:
       - nix build
 
-  develop:
+  dev:
     desc: Starts the application in development mode
     cmds:
       - nix develop -c zsh

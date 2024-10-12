@@ -64,7 +64,7 @@ You can now start an new dev environment using Nix.
 This will automatically build and install this project dependencies.
 
 ```shell
-nix develop
+nix develop -c $SHELL
 ```
 
 ### Run the application
