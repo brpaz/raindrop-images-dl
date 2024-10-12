@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/brpaz/raindrop-images-dl/cmd"
+	"github.com/brpaz/raindrop-images-dl/internal/cmd"
 )
 
 func setupTestDownloadCmd() *cobra.Command {

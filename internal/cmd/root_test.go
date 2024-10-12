@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/brpaz/raindrop-images-dl/cmd"
+	"github.com/brpaz/raindrop-images-dl/internal/cmd"
 )
 
 func TestRootCmd(t *testing.T) {

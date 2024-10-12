@@ -83,7 +83,7 @@ func TestDownloader_DownloadCollection(t *testing.T) {
 
 		dl, _ := setupTestDownloader(t)
 
-		err := dl.DownloadCollection(context.Background(), 0, "output")
+		err := dl.DownloadCollection(context.Background(), 0, "output", false)
 		assert.ErrorIs(t, err, downloader.ErrCollectionIDNotSet)
 	})
 
@@ -92,7 +92,7 @@ func TestDownloader_DownloadCollection(t *testing.T) {
 
 		dl, _ := setupTestDownloader(t)
 
-		err := dl.DownloadCollection(context.Background(), 123, "")
+		err := dl.DownloadCollection(context.Background(), 123, "", false)
 		assert.ErrorIs(t, err, downloader.ErrOutputDirNotSet)
 	})
 
@@ -100,11 +100,11 @@ func TestDownloader_DownloadCollection(t *testing.T) {
 		t.Parallel()
 
 		dl, _ := setupTestDownloader(t)
-		err := dl.DownloadCollection(context.Background(), 123, "non-existent-dir")
+		err := dl.DownloadCollection(context.Background(), 123, "non-existent-dir", false)
 		assert.ErrorIs(t, err, downloader.ErrOutputDirNotExists)
 	})
 
-	t.Run("Success", func(t *testing.T) {
+	t.Run("Success With Info File", func(t *testing.T) {
 		t.Parallel()
 
 		dl, rdClient := setupTestDownloader(t)
@@ -135,7 +135,7 @@ func TestDownloader_DownloadCollection(t *testing.T) {
 		}
 		rdClient.On("GetImagesDropsFromCollection", mock.Anything, collectionID, 0).Return(mockDrops, nil)
 
-		err := dl.DownloadCollection(context.Background(), collectionID, outputDir)
+		err := dl.DownloadCollection(context.Background(), collectionID, outputDir, true)
 		require.NoError(t, err)
 
 		rdClient.AssertExpectations(t)
@@ -164,5 +164,52 @@ func TestDownloader_DownloadCollection(t *testing.T) {
 		assert.Equal(t, mockDrop.Tags, infoFileContent.Tags)
 		assert.NotEmpty(t, infoFileContent.CreatedAt)
 		assert.Equal(t, mockDrop.Link, infoFileContent.OriginalURL)
+	})
+
+	t.Run("Success Without Info file", func(t *testing.T) {
+		t.Parallel()
+
+		dl, rdClient := setupTestDownloader(t)
+		// create tmp dir
+		outputDir := generateTmpDir(t)
+		defer os.RemoveAll(outputDir)
+
+		collectionID := 123
+
+		rdClient.On("GetCollectionByID", mock.Anything, collectionID).Return(&raindrop.CollectionItem{
+			ID: int64(collectionID),
+		}, nil)
+
+		mockDrop := raindrop.Drop{
+			ID:      1,
+			Title:   "Image 1",
+			Note:    "Description for image 1",
+			Tags:    []string{"tag1", "tag2"},
+			Created: time.Now(),
+			Link:    "https://example.com/image1.jpg",
+			Cover:   "https://placehold.co/600x400/000000/FFFFFF/png",
+		}
+
+		mockDrops := &raindrop.ImageDrops{
+			Items: []raindrop.Drop{
+				mockDrop,
+			},
+		}
+		rdClient.On("GetImagesDropsFromCollection", mock.Anything, collectionID, 0).Return(mockDrops, nil)
+
+		err := dl.DownloadCollection(context.Background(), collectionID, outputDir, false)
+		require.NoError(t, err)
+
+		rdClient.AssertExpectations(t)
+
+		// Check if the file was downloaded
+		downloadedFilePath := filepath.Join(outputDir, mockDrop.GetName()+".png")
+		downloadedFileInfoPath := filepath.Join(outputDir, mockDrop.GetName()+".info.json")
+
+		_, err = os.Stat(downloadedFilePath)
+		assert.NoError(t, err)
+
+		_, err = os.Stat(downloadedFileInfoPath)
+		assert.True(t, os.IsNotExist(err))
 	})
 }

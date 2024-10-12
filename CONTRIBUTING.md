@@ -24,11 +24,6 @@ We welcome ideas for new features or improvements. If you have a suggestion, sub
 - Why the feature is useful and how it benefits the project.
 - Any implementation ideas, if applicable.
 
-### Update documentation
-
-
-
-
 
 ## Setup your development environment
 
@@ -69,7 +64,7 @@ You can now start an new dev environment using Nix.
 This will automatically build and install this project dependencies.
 
 ```shell
-nix develop
+nix develop -c $SHELL
 ```
 
 ### Run the application
@@ -103,6 +98,29 @@ Here’s the updated Markdown table with the `aliases`, `summary`, and `commands
 | `snapshot`          | Builds a snapshot release using [GoReleaser](https://goreleaser.com/)   |
 | `build-local`       | Builds the application locally                                          |
 | `build-docker`      | Builds the application using Docker                                     |
+
+## Build with Docker
+
+A Dockerfile is provided to build the application as a Docker image.
+
+To build a docker image, run:
+
+```shell
+task build-docker
+```
+
+And run it using the following command:
+
+```shell
+docker run --rm raindrop-images-dl:local-dev <args>
+```
+
+### Build with Nix
+
+```shell
+nix build
+./result/bin/raindrop-images-dl
+```
 
 ## Development Flow
 
