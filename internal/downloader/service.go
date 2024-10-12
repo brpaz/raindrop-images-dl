@@ -61,7 +61,7 @@ func NewDownloader(opts ...Option) (*Downloader, error) {
 }
 
 // DownloadCollection downloads all images from a Raindrop collection
-func (d *Downloader) DownloadCollection(ctx context.Context, collectionID int, outputDir string) error {
+func (d *Downloader) DownloadCollection(ctx context.Context, collectionID int, outputDir string, genInfoJSON bool) error {
 	if collectionID == 0 {
 		return ErrCollectionIDNotSet
 	}
@@ -96,7 +96,7 @@ func (d *Downloader) DownloadCollection(ctx context.Context, collectionID int, o
 		for _, item := range items.Items {
 			slog.Info("Downloading item", "title", item.Title)
 
-			if err := d.downloadItem(ctx, item, collection.Title, outputDir); err != nil {
+			if err := d.downloadItem(ctx, item, collection.Title, outputDir, genInfoJSON); err != nil {
 				slog.Error("Failed to download item", "title", item.Title, "error", err)
 			}
 		}
@@ -112,7 +112,7 @@ func (d *Downloader) DownloadCollection(ctx context.Context, collectionID int, o
 }
 
 // downloadItem handles downloading an individual item
-func (d *Downloader) downloadItem(ctx context.Context, item raindrop.Drop, collectionName, outputDir string) error {
+func (d *Downloader) downloadItem(ctx context.Context, item raindrop.Drop, collectionName, outputDir string, genInfoJSON bool) error {
 	// Ensure collection-specific directory exists
 	itemOutputDir := filepath.Join(outputDir, collectionName)
 	if err := ensureDir(itemOutputDir); err != nil {
@@ -132,8 +132,10 @@ func (d *Downloader) downloadItem(ctx context.Context, item raindrop.Drop, colle
 	}
 
 	// Create info.json file
-	if err := createInfoFile(baseFilePath, item); err != nil {
-		return fmt.Errorf("failed to create info file: %w", err)
+	if genInfoJSON {
+		if err := createInfoFile(baseFilePath, item); err != nil {
+			return fmt.Errorf("failed to create info file: %w", err)
+		}
 	}
 
 	return nil

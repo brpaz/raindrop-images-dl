@@ -12,6 +12,11 @@
         pkgs = import nixpkgs { inherit system; };
         pname = "raindrop-images-dl";
         version = "0.1.0";
+        gitCommit = self.rev or "dev";
+
+        # Find why this does not work
+        #currentDate = builtins.currentTime;
+        currentDate = "2021-09-01T00:00:00Z";
       in
       {
         devShells.default = pkgs.mkShell {
@@ -42,18 +47,24 @@
           GOROOT = "${pkgs.go}/share/go";
         };
 
-        packages.default = pkgs.stdenv.mkDerivation {
+        packages.default = pkgs.buildGo122Module {
           pname = "${pname}";
           version = "${version}";
           src = ./.;
-          buildInputs = [ pkgs.go ];
 
-          buildPhase = ''
-            # this line removes a bug where value of $HOME is set to a non-writable /homeless-shelter dir
-            export HOME=$(pwd)
-            export CGO_ENABLED=0
-            go build -o $out main.go
-          '';
+          # When updating go.mod or go.sum, a new sha will need to be calculated,
+          # update this if you have a mismatch after doing a change to thos files.
+          vendorHash = "sha256-BNfSwK87GU2YO3x1AbxLwC+ByXkN4n/7OYX5mh04lP4=";
+
+          doCheck = false;
+
+          ldflags = let
+            versionPkg = "github.com/brpaz/raindrop-images-dl/internal/version";
+          in [
+            "-X ${versionPkg}.Version=${version}"
+            "-X ${versionPkg}.GitCommit=${gitCommit}"
+            "-X ${versionPkg}.BuildDate=${currentDate}"
+          ];
 
           meta = with pkgs.lib; {
             homepage = "https://github.com/brpaz/raindrop-images-dl";

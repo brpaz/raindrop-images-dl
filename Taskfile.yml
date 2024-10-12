@@ -97,3 +97,16 @@ tasks:
           --build-arg BUILDTIME={{ .BUILD_DATE }} \
           --load \
           -t {{.PROJECT_NAME }}:local-dev .
+
+  # ==================================================
+  # Build Nix
+  # ==================================================
+  build-nix:
+    desc: Builds the application using Nix
+    cmds:
+      - nix build
+
+  develop:
+    desc: Starts the application in development mode
+    cmds:
+      - nix develop -c zsh
